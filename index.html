@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Library Management System</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background-color: #f4f6f9;
+            overflow-x: hidden;
+        }
+
+        /* COMMON STYLES */
+        .hidden { display: none; 
+        }
+        .section {
+            width: 100%;
+            min-height: 100vh;
+            transition: transform 0.6s ease, opacity 0.6s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .slide-in { transform: translateX(0); opacity: 1; }
+        .slide-out-left { transform: translateX(-100%); opacity: 0; }
+        .slide-out-right { transform: translateX(100%); opacity: 0; }
+
+        /* NAVBAR */
+        .navbar {
+            background-color: #2c7be5;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h2 { color: white; margin: 0; }
+        .navbar a {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .navbar a:hover { text-decoration: underline; }
+
+        /* HERO SECTION */
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 60px 80px;
+            background: linear-gradient(to right, #2c7be5, #5ea1ff);
+            color: white;
+        }
+        .hero-text { width: 50%; }
+        .hero-text h1 { font-size: 40px; margin-bottom: 15px; }
+        .hero-text p { font-size: 18px; margin-bottom: 25px; }
+        .hero-text button {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            background-color: #ffffff;
+            color: #2c7be5;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .hero-text button:hover { background-color: #e6e6e6; }
+        .hero img { width: 380px; }
+
+        /* CARD SECTION */
+        .cards {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 50px;
+        }
+        .card {
+            background-color: white;
+            width: 260px;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .card h3 { color: #2c7be5; }
+        .card p { color: #555; }
+
+        /* LOGIN PAGE */
+        .login-page { background-color: #f4f6f9; display: flex; justify-content: center; align-items: center; }
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .login-box h2 { color: #2c7be5; margin-bottom: 25px; }
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background-color: #2c7be5;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .login-box button:hover { background-color: #1a5bb8; }
+
+        /* BOOKS PAGE */
+        .books-dashboard { padding: 50px; background-color: #f4f6f9; }
+        .books-dashboard h2 { text-align: center; color: #2c7be5; margin-bottom: 20px; }
+        .books-table { width: 90%; margin: 0 auto; border-collapse: collapse; font-family: "Segoe UI", Arial, sans-serif; }
+        .books-table th, .books-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        .books-table th { background-color: #2c7be5; color: white; }
+        .books-table tr:hover { background-color: #f1f1f1; }
+        .status-available { color: green; font-weight: bold; }
+        .status-issued { color: red; font-weight: bold; }
+        #searchInput { padding:10px; width:50%; border-radius:5px; border:1px solid #ccc; font-size:16px; margin-bottom:20px; display:block; margin-left:auto; margin-right:auto; }
+        #finishBtn { margin-top:20px; padding:12px 25px; font-size:16px; border:none; border-radius:5px; cursor:pointer; background:#2c7be5; color:white; }
+
+        /* THANK YOU PAGE */
+        .thank-you-page { display:flex; justify-content:center; align-items:center; background:#2c7be5; color:white; flex-direction:column; }
+        .thank-you-page button {
+            margin-top:30px;
+            padding:12px 25px;
+            font-size:16px;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+        }
+
+        /* RESPONSIVE */
+        @media(max-width: 900px) {
+            .hero { flex-direction: column; text-align: center; }
+            .hero-text { width: 100%; margin-bottom: 20px; }
+            .hero img { width: 250px; }
+            .cards { flex-direction: column; align-items: center; }
+            #searchInput { width:80%; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HOME PAGE -->
+<div id="homePage" class="section slide-in">
+    <div class="navbar">
+        <h2>📚 LibrarySystem</h2>
+        <div>
+            <a id="homeNav">Home</a>
+            <a id="booksNav">Books</a>
+            <a id="loginNav">Login</a>
+        </div>
+    </div>
+
+    <div class="hero">
+        <div class="hero-text">
+            <h1>Online Library Management System</h1>
+            <p>Manage books, authors, and availability easily.  
+               Designed for students and beginners.</p>
+            <button id="getStarted">Get Started</button>
+        </div>
+        <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png">
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <h3>📘 Books</h3>
+            <p>View available books and details</p>
+        </div>
+        <div class="card">
+            <h3>✍ Authors</h3>
+            <p>Manage author information easily</p>
+        </div>
+        <div class="card">
+            <h3>✅ Status</h3>
+            <p>Check issued & available books</p>
+        </div>
+    </div>
+</div>
+
+<!-- LOGIN PAGE -->
+<div id="loginPage" class="section slide-out-right login-page hidden">
+    <div class="login-box">
+        <h2>Login</h2>
+        <input type="text" placeholder="Username">
+        <input type="password" placeholder="Password">
+        <button id="loginBtn">Login</button>
+    </div>
+</div>
+
+<!-- BOOKS PAGE -->
+<div id="booksPage" class="section slide-out-right books-dashboard hidden">
+    <h2>Library Books & Status</h2>
+    <input type="text" id="searchInput" placeholder="Search by book or author">
+    <table class="books-table">
+        <thead>
+            <tr>
+                <th>Book Name</th>
+                <th>Author</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="booksTableBody"></tbody>
+    </table>
+    <button id="finishBtn">Finish</button>
+</div>
+
+<!-- THANK YOU PAGE -->
+<div id="thankYouPage" class="section slide-out-right hidden thank-you-page">
+    <h1 style="font-size:40px; margin-bottom:20px;">🎉 Thank You!</h1>
+    <p style="font-size:20px; text-align:center;">Thanks for using the Online Library Management System.</p>
+    <button id="backHome">Back to Home</button>
+</div>
+
+<script>
+    // PAGE ELEMENTS
+    const homePage = document.getElementById('homePage');
+    const loginPage = document.getElementById('loginPage');
+    const booksPage = document.getElementById('booksPage');
+    const thankYouPage = document.getElementById('thankYouPage');
+
+    const getStarted = document.getElementById('getStarted');
+    const loginNav = document.getElementById('loginNav');
+    const loginBtn = document.getElementById('loginBtn');
+    const booksNav = document.getElementById('booksNav');
+    const homeNav = document.getElementById('homeNav');
+    const finishBtn = document.getElementById('finishBtn');
+    const backHome = document.getElementById('backHome');
+
+    // SHOW LOGIN PAGE
+    function showLogin() {
+        homePage.classList.replace('slide-in','slide-out-left');
+        loginPage.classList.remove('hidden');
+        loginPage.classList.replace('slide-out-right','slide-in');
+    }
+
+    // SHOW BOOKS PAGE
+    function showBooks() {
+        loginPage.classList.replace('slide-in','slide-out-left');
+        booksPage.classList.remove('hidden');
+        booksPage.classList.replace('slide-out-right','slide-in');
+    }
+
+    // SHOW THANK YOU PAGE
+    function showThankYou() {
+        booksPage.classList.replace('slide-in','slide-out-left');
+        thankYouPage.classList.remove('hidden');
+        thankYouPage.classList.replace('slide-out-right','slide-in');
+    }
+
+    // RETURN HOME
+    function showHome() {
+        homePage.classList.replace('slide-out-left','slide-in');
+        loginPage.classList.replace('slide-in','slide-out-right');
+        booksPage.classList.replace('slide-in','slide-out-right');
+        thankYouPage.classList.replace('slide-in','slide-out-right');
+    }
+
+    // NAVIGATION EVENTS
+    getStarted.addEventListener('click', showLogin);
+    loginNav.addEventListener('click', showLogin);
+    loginBtn.addEventListener('click', showBooks);
+    booksNav.addEventListener('click', () => {
+        homePage.classList.add('hidden');
+        loginPage.classList.add('hidden');
+        booksPage.classList.remove('hidden');
+        booksPage.classList.replace('slide-out-right','slide-in');
+    });
+    homeNav.addEventListener('click', showHome);
+    finishBtn.addEventListener('click', showThankYou);
+    backHome.addEventListener('click', showHome);
+
+    // BOOKS DATA
+    const books = [
+        { name: "Harry Potter", author: "J.K. Rowling", status: "Available" },
+        { name: "The Alchemist", author: "Paulo Coelho", status: "Issued" },
+        { name: "Clean Code", author: "Robert C. Martin", status: "Available" },
+        { name: "Thinking in Java", author: "Bruce Eckel", status: "Issued" },
+        { name: "The Hobbit", author: "J.R.R. Tolkien", status: "Available" }
+    ];
+
+    const tableBody = document.getElementById('booksTableBody');
+    const searchInput = document.getElementById('searchInput');
+
+    function displayBooks(filter = '') {
+        tableBody.innerHTML = '';
+        const filteredBooks = books.filter(book =>
+            book.name.toLowerCase().includes(filter.toLowerCase()) ||
+            book.author.toLowerCase().includes(filter.toLowerCase())
+        );
+        filteredBooks.forEach(book => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${book.name}</td>
+                <td>${book.author}</td>
+                <td class="${book.status === 'Available' ? 'status-available' : 'status-issued'}">
+                    ${book.status}
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    // Initial display
+    displayBooks();
+
+    // Search filter
+    searchInput.addEventListener('input', (e) => {
+        displayBooks(e.target.value);
+    });
+</script>
+
+</body>
+</html>
